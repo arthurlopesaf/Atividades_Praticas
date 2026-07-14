@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.orcamento_de_computadores.TelaPrincipalController">
+    <children>
+        <VBox alignment="CENTER" fillWidth="false" layoutX="37.0" layoutY="50.0" prefHeight="399.0" prefWidth="380.0" spacing="15.0" style="-fx-background-color: #d3d3d3;">
+            <children>
+                <TextField fx:id="txtCliente" prefHeight="25.0" prefWidth="214.0" promptText="Nome do cliente" />
+                <ComboBox fx:id="cboPerfil" prefHeight="25.0" prefWidth="277.0" promptText="Perfil">
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </ComboBox>
+                <Button mnemonicParsing="false" onAction="#btnCalcularRecomendacao" text="Recomendação">
+                    <VBox.margin>
+                        <Insets bottom="-10.0" top="-8.0" />
+                    </VBox.margin>
+                </Button>
+                <ComboBox fx:id="cboProcessador" prefWidth="230.0" promptText="Processador">
+                    <VBox.margin>
+                        <Insets top="20.0" />
+                    </VBox.margin>
+                </ComboBox>
+                <ComboBox fx:id="cboPlacaMae" prefWidth="230.0" promptText="Placa-Mãe" />
+                <ComboBox fx:id="cboMemoriaRam" prefWidth="230.0" promptText="Memória RAM" />
+                <ComboBox fx:id="cboSsd" prefWidth="230.0" promptText="SSD" />
+                <ComboBox fx:id="cboPlacaVideo" prefWidth="230.0" promptText="Placa de vídeo" />
+                <ComboBox fx:id="cboFonte" prefWidth="230.0" promptText="Fonte" />
+                <ComboBox fx:id="cboGabinete" prefWidth="230.0" promptText="Gabinete" />
+            </children>
+        </VBox>
+        <Label layoutX="81.0" layoutY="5.0" prefHeight="45.0" prefWidth="298.0" text="Orçamento de computadores">
+            <font>
+                <Font name="System Bold" size="20.0" />
+            </font>
+        </Label>
+        <CheckBox fx:id="chkMonitor" layoutX="46.0" layoutY="503.0" mnemonicParsing="false" text="Monitor" />
+        <CheckBox fx:id="chkTecladoMouse" layoutX="172.0" layoutY="503.0" mnemonicParsing="false" text="Teclado e mouse" />
+        <CheckBox fx:id="chkHeadset" layoutX="344.0" layoutY="503.0" mnemonicParsing="false" text="Headset" />
+        <Label layoutX="175.0" layoutY="449.0" text="opcionais">
+            <font>
+                <Font name="System Bold" size="22.0" />
+            </font>
+        </Label>
+        <Button layoutX="164.0" layoutY="544.0" mnemonicParsing="false" onAction="#btnOrcamento" text="Calcular Orçamento" />
+      <Button layoutX="351.0" layoutY="544.0" mnemonicParsing="false" onAction="#btnLimpar" text="Limpar" />
+      <Spinner fx:id="Desconto" editable="true" layoutX="25.0" layoutY="561.0" prefHeight="25.0" prefWidth="53.0" />
+      <Label layoutX="20.0" layoutY="536.0" text="Desconto %" />
+    </children>
+</AnchorPane>
