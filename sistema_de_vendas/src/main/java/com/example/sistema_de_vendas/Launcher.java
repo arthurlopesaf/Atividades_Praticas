@@ -1,0 +1,9 @@
+package com.example.sistema_de_vendas;
+
+import javafx.application.Application;
+
+public class Launcher {
+    public static void main(String[] args) {
+        Application.launch(HelloApplication.class, args);
+    }
+}
