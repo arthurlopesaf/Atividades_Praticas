@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.controle_estacionamento.TelaPrincipalController">
+
+    <!-- TOPO -->
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+
+            <TitledPane collapsible="false" text="Cadastro do Veículo">
+                <content>
+                    <GridPane hgap="10" vgap="10">
+
+                        <padding>
+                            <Insets bottom="10" left="10" right="10" top="10" />
+                        </padding>
+
+                        <Label text="Placa:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+
+                        <TextField fx:id="txtPlaca" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Modelo:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+
+                        <TextField fx:id="txtModelo" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                        <Label text="Tipo:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+
+                        <ComboBox fx:id="cboTipoVeiculo" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Entrada:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+
+                        <DatePicker fx:id="dtpEntrada" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+
+                        <Label text="Saída:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+
+                        <DatePicker fx:id="dtpSaida" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <columnConstraints>
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                     <ColumnConstraints />
+                  </columnConstraints>
+                  <rowConstraints>
+                     <RowConstraints />
+                     <RowConstraints />
+                     <RowConstraints />
+                  </rowConstraints>
+
+                    </GridPane>
+                </content>
+            </TitledPane>
+
+            <HBox spacing="10">
+                <Label text="Pesquisar Placa:" />
+
+                <TextField fx:id="txtPesquisarPlaca" prefWidth="200" />
+
+                <Button onAction="#btnPesquisar" text="Pesquisar" />
+
+                <Button onAction="#btnMostrarTodos" text="Mostrar Todos" />
+            </HBox>
+
+        </VBox>
+    </top>
+
+    <!-- CENTRO -->
+    <center>
+
+        <TableView fx:id="dgvVeiculos">
+
+            <columns>
+
+                <TableColumn fx:id="colPlaca" prefWidth="100" text="Placa" />
+
+                <TableColumn fx:id="colModelo" prefWidth="150" text="Modelo" />
+
+                <TableColumn fx:id="colTipo" prefWidth="100" text="Tipo" />
+
+                <TableColumn fx:id="colEntrada" prefWidth="160" text="Entrada" />
+
+                <TableColumn fx:id="colSaida" prefWidth="160" text="Saída" />
+
+                <TableColumn fx:id="colHoras" prefWidth="80" text="Horas" />
+
+                <TableColumn fx:id="colValor" prefWidth="100" text="Valor" />
+
+                <TableColumn fx:id="colSituacao" prefWidth="120" text="Situação" />
+
+            </columns>
+
+        </TableView>
+
+    </center>
+
+    <!-- RODAPÉ -->
+    <bottom>
+
+        <VBox spacing="10">
+
+            <padding>
+                <Insets bottom="10" left="10" right="10" top="10" />
+            </padding>
+
+            <HBox spacing="20">
+
+                <Label text="Estacionados:" />
+                <Label fx:id="lblEstacionados" text="0" />
+
+                <Label text="Finalizados:" />
+                <Label fx:id="lblFinalizados" text="0" />
+
+                <Label text="Total Recebido:" />
+                <Label fx:id="lblTotalRecebido" text="R$ 0,00" />
+
+            </HBox>
+
+            <HBox spacing="10">
+
+                <Button onAction="#btnRegistrarEntrada" text="Registrar Entrada" />
+
+                <Button onAction="#btnRegistrarSaida" text="Registrar Saída" />
+
+                <Button onAction="#btnRemover" text="Remover" />
+
+                <Button onAction="#btnLimpar" text="Limpar" />
+
+                <Button onAction="#btnEncerrar" text="Encerrar" />
+
+            </HBox>
+
+        </VBox>
+
+    </bottom>
+
+</BorderPane>
