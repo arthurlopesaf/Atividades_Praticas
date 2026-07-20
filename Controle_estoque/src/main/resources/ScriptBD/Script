@@ -1,0 +1,204 @@
+CREATE DATABASE IF NOT EXISTS ds_controle_estoque
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+USE ds_controle_estoque;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS movimentacoes;
+DROP TABLE IF EXISTS produtos;
+DROP TABLE IF EXISTS categorias;
+DROP VIEW IF EXISTS vw_produtos_completos;
+DROP VIEW IF EXISTS vw_movimentacoes_completas;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- ============================================
+-- TABELA DE CATEGORIAS
+-- ============================================
+CREATE TABLE categorias (
+    id INT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    descricao VARCHAR(255),
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_categorias_nome (nome),
+    INDEX idx_nome (nome)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
+-- TABELA DE PRODUTOS
+-- ============================================
+CREATE TABLE produtos (
+    id INT NOT NULL AUTO_INCREMENT,
+    codigo VARCHAR(50) NOT NULL,
+    nome VARCHAR(150) NOT NULL,
+    descricao VARCHAR(500),
+    id_categoria INT NOT NULL,
+    preco_compra DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    preco_venda DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    estoque_minimo INT NOT NULL DEFAULT 0,
+    saldo_atual INT NOT NULL DEFAULT 0,
+    ativo TINYINT(1) NOT NULL DEFAULT 1,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    UNIQUE KEY uk_produtos_codigo (codigo),
+    INDEX idx_codigo (codigo),
+    INDEX idx_nome (nome),
+    INDEX idx_categoria (id_categoria),
+    INDEX idx_ativo (ativo),
+    INDEX idx_estoque_minimo (estoque_minimo),
+    INDEX idx_saldo_atual (saldo_atual),
+    CONSTRAINT fk_produtos_categorias
+        FOREIGN KEY (id_categoria)
+        REFERENCES categorias (id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+    CONSTRAINT ck_preco_compra CHECK (preco_compra >= 0),
+    CONSTRAINT ck_preco_venda CHECK (preco_venda > 0),
+    CONSTRAINT ck_estoque_minimo CHECK (estoque_minimo >= 0),
+    CONSTRAINT ck_saldo_atual CHECK (saldo_atual >= 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
+-- TABELA DE MOVIMENTAÇÕES
+-- ============================================
+CREATE TABLE movimentacoes (
+    id INT NOT NULL AUTO_INCREMENT,
+    id_produto INT NOT NULL,
+    tipo ENUM('ENTRADA', 'SAIDA') NOT NULL,
+    quantidade INT NOT NULL,
+    saldo_anterior INT NOT NULL,
+    saldo_novo INT NOT NULL,
+    observacao VARCHAR(500),
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    INDEX idx_produto (id_produto),
+    INDEX idx_tipo (tipo),
+    INDEX idx_criado_em (criado_em),
+    INDEX idx_produto_criado (id_produto, criado_em),
+    CONSTRAINT fk_movimentacoes_produtos
+        FOREIGN KEY (id_produto)
+        REFERENCES produtos (id)
+        ON UPDATE CASCADE
+        ON DELETE RESTRICT,
+    CONSTRAINT ck_quantidade CHECK (quantidade > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
+-- INSERÇÃO DE DADOS INICIAIS
+-- ============================================
+
+-- Categorias
+INSERT INTO categorias (nome, descricao) VALUES
+('Informática', 'Produtos de informática em geral'),
+('Acessórios', 'Acessórios para computadores'),
+('Escritório', 'Materiais e suportes de escritório'),
+('Redes', 'Produtos para rede e conectividade');
+
+-- Produtos (criados com saldo zero)
+INSERT INTO produtos
+(codigo, nome, descricao, id_categoria, preco_compra, preco_venda, estoque_minimo, saldo_atual, ativo)
+VALUES
+('INF-001', 'Teclado USB', 'Teclado USB com fio', 2, 45.00, 79.90, 5, 0, 1),
+('INF-002', 'Mouse Óptico USB', 'Mouse óptico com fio USB', 2, 25.00, 49.90, 5, 0, 1),
+('RED-001', 'Cabo de Rede CAT6', 'Cabo de rede CAT6 com 5 metros', 4, 12.00, 24.90, 10, 0, 1),
+('ESC-001', 'Suporte para Notebook', 'Suporte ajustável para notebook', 3, 55.00, 99.90, 5, 0, 1);
+
+-- Movimentações de ENTRADA (formam o estoque inicial)
+-- Importante: saldo_anterior e saldo_novo devem ser preenchidos corretamente
+INSERT INTO movimentacoes
+(id_produto, tipo, quantidade, saldo_anterior, saldo_novo, observacao)
+VALUES
+(1, 'ENTRADA', 10, 0, 10, 'Estoque inicial'),
+(2, 'ENTRADA', 8, 0, 8, 'Estoque inicial'),
+(3, 'ENTRADA', 20, 0, 20, 'Estoque inicial'),
+(4, 'ENTRADA', 3, 0, 3, 'Estoque inicial');
+
+-- Atualiza saldo dos produtos conforme movimentações
+UPDATE produtos SET saldo_atual = 10 WHERE id = 1;
+UPDATE produtos SET saldo_atual = 8 WHERE id = 2;
+UPDATE produtos SET saldo_atual = 20 WHERE id = 3;
+UPDATE produtos SET saldo_atual = 3 WHERE id = 4;
+
+-- ============================================
+-- VIEWS PARA CONSULTAS COMUNS
+-- ============================================
+
+-- View de produtos com todas as informações
+CREATE VIEW vw_produtos_completos AS
+SELECT
+    p.id,
+    p.codigo,
+    p.nome,
+    p.descricao,
+    p.id_categoria,
+    c.nome AS categoria,
+    p.preco_compra,
+    p.preco_venda,
+    p.estoque_minimo,
+    p.saldo_atual,
+    p.ativo,
+    p.criado_em,
+    CASE
+        WHEN p.saldo_atual <= p.estoque_minimo THEN 'ESTOQUE BAIXO'
+        ELSE 'ESTOQUE NORMAL'
+    END AS situacao_estoque,
+    (p.saldo_atual * p.preco_venda) AS valor_estimado
+FROM produtos p
+INNER JOIN categorias c ON c.id = p.id_categoria;
+
+-- View de movimentações com informações do produto
+CREATE VIEW vw_movimentacoes_completas AS
+SELECT
+    m.id,
+    m.id_produto,
+    p.codigo,
+    p.nome AS produto,
+    m.tipo,
+    m.quantidade,
+    m.saldo_anterior,
+    m.saldo_novo,
+    m.observacao,
+    m.criado_em
+FROM movimentacoes m
+INNER JOIN produtos p ON p.id = m.id_produto
+ORDER BY m.criado_em DESC;
+
+-- ============================================
+-- CONSULTAS ÚTEIS PARA ANÁLISE
+-- ============================================
+
+-- Produtos com estoque baixo
+SELECT *
+FROM vw_produtos_completos
+WHERE saldo_atual <= estoque_minimo
+AND ativo = 1;
+
+-- Total de produtos
+SELECT COUNT(*) AS total_produtos FROM produtos;
+
+-- Produtos ativos
+SELECT COUNT(*) AS produtos_ativos FROM produtos WHERE ativo = 1;
+
+-- Total de itens em estoque
+SELECT SUM(saldo_atual) AS total_itens_estoque FROM produtos WHERE ativo = 1;
+
+-- Valor estimado do estoque
+SELECT SUM(saldo_atual * preco_venda) AS valor_estimado_estoque FROM produtos WHERE ativo = 1;
+
+-- Produtos com estoque baixo
+SELECT COUNT(*) AS produtos_estoque_baixo
+FROM produtos
+WHERE saldo_atual <= estoque_minimo
+AND ativo = 1;
+
+-- Últimas movimentações
+SELECT * FROM vw_movimentacoes_completas LIMIT 20;
+
+SELECT 'Categorias' AS tabela, COUNT(*) AS total FROM categorias
+UNION ALL
+SELECT 'Produtos' AS tabela, COUNT(*) AS total FROM produtos
+UNION ALL
+SELECT 'Movimentações' AS tabela, COUNT(*) AS total FROM movimentacoes;

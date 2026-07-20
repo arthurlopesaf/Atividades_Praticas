@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
+            prefWidth="900.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Controllers.MovimentacaoController">
+
+    <VBox spacing="15" style="-fx-padding: 15;" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0" 
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <Label text="MOVIMENTAÇÕES DE ESTOQUE" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+        <VBox spacing="10" style="-fx-border-color: #e0e0e0; -fx-padding: 15; -fx-border-radius: 5;">
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Selecione o Produto" style="-fx-font-size: 12;"/>
+                    <ComboBox fx:id="cmbProduto" prefWidth="250"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="15">
+                <VBox spacing="5">
+                    <Label fx:id="lblSaldoAtual" text="Saldo Atual: 0 un." style="-fx-font-size: 12; -fx-font-weight: bold;"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label fx:id="lblEstoqueMinimo" text="Estoque Mínimo: 0 un." style="-fx-font-size: 12; -fx-font-weight: bold;"/>
+                </VBox>
+                <VBox spacing="5">
+                    <Label fx:id="lblProdutoAtivo" text="Status: Ativo" style="-fx-font-size: 12; -fx-font-weight: bold; -fx-text-fill: green;"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="20">
+                <VBox spacing="10">
+                    <Label text="Tipo de Movimentação" style="-fx-font-size: 12;"/>
+                    <HBox spacing="20">
+                        <RadioButton fx:id="radEntrada" text="Entrada" selected="true"/>
+                        <RadioButton fx:id="radSaida" text="Saída"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="15">
+                <VBox spacing="5" HBox.hgrow="ALWAYS">
+                    <Label text="Quantidade" style="-fx-font-size: 12;"/>
+                    <TextField fx:id="txtQuantidade" promptText="Digite a quantidade"/>
+                </VBox>
+            </HBox>
+
+            <VBox spacing="5">
+                <Label text="Observação (Opcional)" style="-fx-font-size: 12;"/>
+                <TextArea fx:id="txtObservacao" prefRowCount="3" wrapText="true" promptText="Digite observações sobre a movimentação"/>
+            </VBox>
+
+            <HBox spacing="10">
+                <Button fx:id="btnRegistrar" text="Registrar Movimentação" prefWidth="200" style="-fx-font-size: 12;"/>
+                <Button fx:id="btnLimpar" text="Limpar Campos" prefWidth="150"/>
+            </HBox>
+        </VBox>
+
+        <Label text="Histórico de Movimentações" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+        <TableView fx:id="tabela" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colTipo" text="Tipo" prefWidth="80"/>
+                <TableColumn fx:id="colQuantidade" text="Quantidade" prefWidth="100"/>
+                <TableColumn fx:id="colSaldoAnterior" text="Saldo Anterior" prefWidth="100"/>
+                <TableColumn fx:id="colSaldoNovo" text="Saldo Novo" prefWidth="100"/>
+                <TableColumn fx:id="colObservacao" text="Observação" prefWidth="250"/>
+                <TableColumn fx:id="colData" text="Data/Hora" prefWidth="180"/>
+            </columns>
+        </TableView>
+    </VBox>
+</AnchorPane>

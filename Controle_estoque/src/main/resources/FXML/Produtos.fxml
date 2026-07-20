@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Controllers.ProdutoController">
+
+    <VBox spacing="15"
+          style="-fx-padding: 15;"
+          AnchorPane.topAnchor="0"
+          AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0"
+          AnchorPane.rightAnchor="0">
+
+        <Label text="CADASTRO DE PRODUTOS"
+               style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+
+
+        <GridPane hgap="15" vgap="10">
+
+            <columnConstraints>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+                <ColumnConstraints percentWidth="25"/>
+            </columnConstraints>
+
+
+            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <Label text="Código"/>
+                <TextField fx:id="txtCodigo" promptText="Digite o código"/>
+            </VBox>
+
+
+            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <Label text="Nome"/>
+                <TextField fx:id="txtNome" promptText="Digite o nome"/>
+            </VBox>
+
+
+            <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="0">
+                <Label text="Categoria"/>
+                <ComboBox fx:id="cmbCategoria" prefWidth="150"/>
+            </VBox>
+
+
+            <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="0">
+                <Label text="Status"/>
+                <CheckBox fx:id="chkAtivo"
+                          text="Ativo"
+                          selected="true"/>
+            </VBox>
+
+
+            <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <Label text="Preço Compra"/>
+                <TextField fx:id="txtPrecoCompra" promptText="0.00"/>
+            </VBox>
+
+
+            <VBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Label text="Preço Venda"/>
+                <TextField fx:id="txtPrecoVenda" promptText="0.00"/>
+            </VBox>
+
+
+            <VBox spacing="5" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                <Label text="Estoque Mínimo"/>
+                <TextField fx:id="txtEstoqueMinimo" promptText="0"/>
+            </VBox>
+
+
+            <VBox spacing="5" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                <Label fx:id="lblSaldoAtual"
+                       text="Saldo: 0 un."
+                       style="-fx-font-weight: bold;"/>
+            </VBox>
+
+
+        </GridPane>
+
+
+        <HBox spacing="10">
+
+            <Button fx:id="btnAdicionar"
+                    text="Adicionar"
+                    prefWidth="100"/>
+
+            <Button fx:id="btnAtualizar"
+                    text="Atualizar"
+                    prefWidth="100"/>
+
+            <Button fx:id="btnRemover"
+                    text="Remover"
+                    prefWidth="100"/>
+
+            <Button fx:id="btnLimpar"
+                    text="Limpar"
+                    prefWidth="100"/>
+
+        </HBox>
+
+
+        <Label text="Produtos Cadastrados"
+               style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+
+        <TableView fx:id="tabela" VBox.vgrow="ALWAYS">
+
+            <columns>
+
+                <TableColumn fx:id="colCodigo"
+                             text="Código"
+                             prefWidth="100"/>
+
+                <TableColumn fx:id="colNome"
+                             text="Nome"
+                             prefWidth="200"/>
+
+                <TableColumn fx:id="colCategoria"
+                             text="Categoria"
+                             prefWidth="150"/>
+
+                <TableColumn fx:id="colSaldo"
+                             text="Saldo"
+                             prefWidth="80"/>
+
+                <TableColumn fx:id="colAtivo"
+                             text="Ativo"
+                             prefWidth="70"/>
+
+            </columns>
+
+        </TableView>
+
+
+    </VBox>
+
+</AnchorPane>
